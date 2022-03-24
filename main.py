@@ -13,7 +13,7 @@ import argparse
 
 from models import *
 from utils import progress_bar
-
+from transform import factorizeModel
 
 parser = argparse.ArgumentParser(description="PyTorch CIFAR10 Training")
 parser.add_argument("--lr", default=0.1, type=float, help="learning rate")
@@ -74,7 +74,7 @@ classes = (
 # Model
 print("==> Building model..")
 # net = VGG('VGG19')
-net = ResNet18()
+model = ResNet18()
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
@@ -88,9 +88,9 @@ net = ResNet18()
 # net = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
-net = net.to(device)
+model = model.to(device)
 if device == "cuda":
-    net = torch.nn.DataParallel(net)
+    model = torch.nn.DataParallel(model)
     cudnn.benchmark = True
 
 if args.resume:
@@ -98,26 +98,26 @@ if args.resume:
     print("==> Resuming from checkpoint..")
     assert os.path.isdir("checkpoint"), "Error: no checkpoint directory found!"
     checkpoint = torch.load("./checkpoint/ckpt.pth")
-    net.load_state_dict(checkpoint["net"])
+    model.load_state_dict(checkpoint["net"])
     best_acc = checkpoint["acc"]
     start_epoch = checkpoint["epoch"]
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
+optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
 # Training
 def train(epoch):
     print("\nEpoch: %d" % epoch)
-    net.train()
+    model.train()
     train_loss = 0
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
-        outputs = net(inputs)
+        outputs = model(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
@@ -137,14 +137,14 @@ def train(epoch):
 
 def test(epoch):
     global best_acc
-    net.eval()
+    model.eval()
     test_loss = 0
     correct = 0
     total = 0
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = net(inputs)
+            outputs = model(inputs)
             loss = criterion(outputs, targets)
 
             test_loss += loss.item()
@@ -169,7 +169,7 @@ def test(epoch):
     if acc > best_acc:
         print("Saving..")
         state = {
-            "net": net.state_dict(),
+            "net": model.state_dict(),
             "acc": acc,
             "epoch": epoch,
         }
@@ -178,8 +178,19 @@ def test(epoch):
         torch.save(state, "./checkpoint/ckpt.pth")
         best_acc = acc
 
+TOTAL = 200
+WARM_UP = 20
+INTERVAL = 5
+for epoch in range(start_epoch, start_epoch + WARM_UP):
+    train(epoch)
+    test(epoch)
+    scheduler.step()
 
-for epoch in range(start_epoch, start_epoch + 200):
+factorizeModel(model, 0.25)
+print('Post factorization')
+test(epoch)
+
+for epoch in range(TOTAL - WARM_UP):
     train(epoch)
     test(epoch)
     scheduler.step()
