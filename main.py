@@ -187,10 +187,10 @@ for epoch in range(start_epoch, start_epoch + WARM_UP):
     scheduler.step()
 
 print('Before factorization')
-test(epoch)
+test(0)
 factorizeModel(model, 0.25)
 print('Post factorization')
-test(epoch)
+test(0)
 
 for epoch in range(TOTAL - WARM_UP):
     train(epoch)
