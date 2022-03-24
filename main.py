@@ -194,9 +194,13 @@ if __name__ ==  '__main__':
     test(0)
     freezeResidual(model)        
     for epoch in range(TOTAL - WARM_UP):
-        if (epoch % INTERVAL) == 0:    
-            unfreezeResidual(model)        
-            train(epoch)
-            test(epoch)
-            scheduler.step()
+        if (epoch % INTERVAL) == 0:  
+            unfreezeResidual(model)  
+
+        train(epoch)
+        test(epoch)
+        scheduler.step()
+        
+        if (epoch % INTERVAL) == 0:  
             freezeResidual(model)        
+        
