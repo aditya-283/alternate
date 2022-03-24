@@ -192,11 +192,11 @@ if __name__ ==  '__main__':
     factorizeModel(model, 0.25)
     print('Post factorization')
     test(0)
-
+    freezeResidual(model)        
     for epoch in range(TOTAL - WARM_UP):
-        if (epoch % INTERVAL) == 0:
-            freezeResidual(model)
+        if (epoch % INTERVAL) == 0:    
+            unfreezeResidual(model)        
             train(epoch)
             test(epoch)
             scheduler.step()
-            unfreezeResidual(model)
+            freezeResidual(model)        
