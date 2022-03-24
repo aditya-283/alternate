@@ -183,10 +183,10 @@ if __name__ ==  '__main__':
     TOTAL = 200
     WARM_UP = 10
     INTERVAL = 5
-    # for epoch in range(start_epoch, start_epoch + WARM_UP):
-    #     train(epoch)
-    #     test(epoch)
-    #     scheduler.step()
+    for epoch in range(start_epoch, start_epoch + WARM_UP):
+        train(epoch)
+        test(epoch)
+        scheduler.step()
 
     print('Before factorization')
     test(0)

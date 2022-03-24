@@ -181,7 +181,6 @@ def factorizeModel(model, rank_ratio): # in-place
         if isinstance(module, nn.Conv2d) and min(module.weight.size()[:2]) > 4 and module.stride[0] == 1:
             factorizedLayer = factorizeLayer(rgetattr(model, name), rank_ratio)
             rsetattr(model, name, factorizedLayer)
-            print(factorizedLayer.forward)
 
 
 resnet = ResNet18()
