@@ -16,7 +16,7 @@ from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
 TOTAL = 200
-WARM_UP = 10
+WARM_UP = 5
 INTERVAL = 5
 
 parser = argparse.ArgumentParser(description="PyTorch CIFAR10 Training")
