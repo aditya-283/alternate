@@ -186,6 +186,8 @@ for epoch in range(start_epoch, start_epoch + WARM_UP):
     test(epoch)
     scheduler.step()
 
+print('Before factorization')
+test(epoch)
 factorizeModel(model, 0.25)
 print('Post factorization')
 test(epoch)
