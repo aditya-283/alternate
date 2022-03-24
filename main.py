@@ -45,17 +45,17 @@ transform_test = transforms.Compose(
 )
 
 trainset = torchvision.datasets.CIFAR10(
-    root="./data", train=True, download=False, transform=transform_train
+    root="./data", train=True, download=True, transform=transform_train
 )
 trainloader = torch.utils.data.DataLoader(
-    trainset, batch_size=128, shuffle=True, num_workers=2
+    trainset, batch_size=128, shuffle=True, num_workers=1
 )
 
 testset = torchvision.datasets.CIFAR10(
-    root="./data", train=False, download=False, transform=transform_test
+    root="./data", train=False, download=True, transform=transform_test
 )
 testloader = torch.utils.data.DataLoader(
-    testset, batch_size=100, shuffle=False, num_workers=2
+    testset, batch_size=100, shuffle=False, num_workers=1
 )
 
 classes = (
@@ -89,9 +89,9 @@ model = ResNet18()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 model = model.to(device)
-if device == "cuda":
-    model = torch.nn.DataParallel(model)
-    cudnn.benchmark = True
+# if device == "cuda":
+#     model = torch.nn.DataParallel(model)
+#     cudnn.benchmark = True
 
 if args.resume:
     # Load checkpoint.
@@ -178,21 +178,23 @@ def test(epoch):
         torch.save(state, "./checkpoint/ckpt.pth")
         best_acc = acc
 
-TOTAL = 200
-WARM_UP = 0
-INTERVAL = 5
-for epoch in range(start_epoch, start_epoch + WARM_UP):
-    train(epoch)
-    test(epoch)
-    scheduler.step()
 
-print('Before factorization')
-test(0)
-factorizeModel(model, 0.25)
-print('Post factorization')
-test(0)
+if __name__ ==  '__main__':
+    TOTAL = 200
+    WARM_UP = 0
+    INTERVAL = 5
+    # for epoch in range(start_epoch, start_epoch + WARM_UP):
+    #     train(epoch)
+    #     test(epoch)
+    #     scheduler.step()
 
-for epoch in range(TOTAL - WARM_UP):
-    train(epoch)
-    test(epoch)
-    scheduler.step()
+    print('Before factorization')
+    test(0)
+    factorizeModel(model, 0.25)
+    print('Post factorization')
+    test(0)
+
+    for epoch in range(TOTAL - WARM_UP):
+        train(epoch)
+        test(epoch)
+        scheduler.step()
