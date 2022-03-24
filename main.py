@@ -179,7 +179,7 @@ def test(epoch):
         best_acc = acc
 
 TOTAL = 200
-WARM_UP = 20
+WARM_UP = 0
 INTERVAL = 5
 for epoch in range(start_epoch, start_epoch + WARM_UP):
     train(epoch)
