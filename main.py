@@ -13,7 +13,11 @@ import argparse
 
 from models import *
 from utils import progress_bar
-from transform import factorizeModel
+from transform import factorizeModel, freezeResidual, unfreezeResidual
+
+TOTAL = 200
+WARM_UP = 10
+INTERVAL = 5
 
 parser = argparse.ArgumentParser(description="PyTorch CIFAR10 Training")
 parser.add_argument("--lr", default=0.1, type=float, help="learning rate")
@@ -131,9 +135,7 @@ def train(epoch):
             batch_idx,
             len(trainloader),
             "Loss: %.3f | Acc: %.3f%% (%d/%d)"
-            % (train_loss / (batch_idx + 1), 100.0 * correct / total, correct, total),
-        )
-
+            % (train_loss / (batch_idx + 1), 100.0 * correct / total, correct, total))
 
 def test(epoch):
     global best_acc
@@ -180,9 +182,6 @@ def test(epoch):
 
 
 if __name__ ==  '__main__':
-    TOTAL = 200
-    WARM_UP = 10
-    INTERVAL = 5
     for epoch in range(start_epoch, start_epoch + WARM_UP):
         train(epoch)
         test(epoch)
@@ -195,6 +194,9 @@ if __name__ ==  '__main__':
     test(0)
 
     for epoch in range(TOTAL - WARM_UP):
-        train(epoch)
-        test(epoch)
-        scheduler.step()
+        if (epoch % INTERVAL) == 0:
+            freezeResidual(model)
+            train(epoch)
+            test(epoch)
+            scheduler.step()
+            unfreezeResidual(model)

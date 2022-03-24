@@ -128,13 +128,6 @@ class ConvLR(nn.Module):
             dtype=dtype
         )
 
-    def freeze_residual(self):
-        for param in self.res.parameters():
-            param.requires_grad = False
-
-    def unfreeze_residual(self):
-        for param in self.res.parameters():
-            param.requires_grad = True
 
     def forward(self, input):
         return self.v(self.u(input)) + self.res(input)
@@ -182,6 +175,17 @@ def factorizeModel(model, rank_ratio): # in-place
             factorizedLayer = factorizeLayer(rgetattr(model, name), rank_ratio)
             rsetattr(model, name, factorizedLayer)
 
+def unfreezeResidual(model):
+    for name, param in model.named_parameters():
+        if "res" in name:
+            print(name)
+            param.requires_grad = True
+
+def freezeResidual(model):
+    for name, param in model.named_parameters():
+        if "res" in name:
+            print(name)
+            param.requires_grad = False
 
 resnet = ResNet18()
 factorizeModel(resnet, 0.25)
