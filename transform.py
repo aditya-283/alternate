@@ -102,6 +102,8 @@ class ConvLR(nn.Module):
             stride=stride,
             padding=padding,
             bias=False,
+            device=device,
+            dtype=dtype
         )
 
         self.v = nn.Conv2d(
@@ -111,6 +113,8 @@ class ConvLR(nn.Module):
             stride=1,
             padding=0,
             bias=bias,
+            device=device,
+            dtype=dtype
         )
 
         self.res = nn.Conv2d(
@@ -120,6 +124,8 @@ class ConvLR(nn.Module):
             stride=stride,
             padding=padding,
             bias=False,
+            device=device,
+            dtype=dtype
         )
 
         def freeze_residual(self):
