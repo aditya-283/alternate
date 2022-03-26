@@ -16,8 +16,12 @@ from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
 TOTAL = 200
-WARM_UP = 5
-INTERVAL = 5
+# WARM_UP = 5
+# INTERVAL = 5
+WARM_UP = 200
+
+train_accs = []
+test_accs = []
 
 parser = argparse.ArgumentParser(description="PyTorch CIFAR10 Training")
 parser.add_argument("--lr", default=0.1, type=float, help="learning rate")
@@ -131,6 +135,8 @@ def train(epoch):
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
 
+        train_accs.append(100.0 * correct / total)
+
         progress_bar(
             batch_idx,
             len(trainloader),
@@ -153,6 +159,8 @@ def test(epoch):
             _, predicted = outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
+
+            test_accs.append(100.0 * correct / total)
 
             progress_bar(
                 batch_idx,
