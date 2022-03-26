@@ -17,8 +17,8 @@ from transform import factorizeModel, freezeResidual, unfreezeResidual
 
 TOTAL = 200
 # WARM_UP = 5
-# INTERVAL = 5
-WARM_UP = 200
+WARM_UP = 20
+INTERVAL = 5
 
 train_accs = []
 test_accs = []
