@@ -16,7 +16,6 @@ from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
 TOTAL = 200
-# WARM_UP = 5
 WARM_UP = 20
 INTERVAL = 5
 
@@ -113,7 +112,7 @@ if args.resume:
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
 # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-scheduler = torch.optim.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
 ##  multi step LR
 
 # Training
