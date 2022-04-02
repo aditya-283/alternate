@@ -81,8 +81,8 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print("==> Building model..")
-# net = VGG('VGG19')
 model = ResNet18()
+# net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
@@ -112,8 +112,9 @@ if args.resume:
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
-scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-
+# scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+scheduler = torch.optim.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
+##  multi step LR
 
 # Training
 def train(epoch):
@@ -141,7 +142,9 @@ def train(epoch):
             batch_idx,
             len(trainloader),
             "Loss: %.3f | Acc: %.3f%% (%d/%d)"
-            % (train_loss / (batch_idx + 1), 100.0 * correct / total, correct, total))
+            % (train_loss / (batch_idx + 1), 100.0 * correct / total, correct, total),
+        )
+
 
 def test(epoch):
     global best_acc
@@ -189,26 +192,25 @@ def test(epoch):
         best_acc = acc
 
 
-if __name__ ==  '__main__':
+if __name__ == "__main__":
     for epoch in range(start_epoch, start_epoch + WARM_UP):
         train(epoch)
         test(epoch)
         scheduler.step()
 
-    print('Before factorization')
+    print("Before factorization")
     test(0)
     factorizeModel(model, 0.25)
-    print('Post factorization')
+    print("Post factorization")
     test(0)
-    freezeResidual(model)        
+    freezeResidual(model)
     for epoch in range(TOTAL - WARM_UP):
-        if (epoch % INTERVAL) == 0:  
-            unfreezeResidual(model)  
+        if (epoch % INTERVAL) == 0:
+            unfreezeResidual(model)
 
         train(epoch)
         test(epoch)
         scheduler.step()
-        
-        if (epoch % INTERVAL) == 0:  
-            freezeResidual(model)        
-        
+
+        if (epoch % INTERVAL) == 0:
+            freezeResidual(model)
