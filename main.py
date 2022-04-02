@@ -196,8 +196,8 @@ def test(epoch):
 if __name__ == "__main__":
     for epoch in range(start_epoch, start_epoch + WARM_UP):
         train(epoch)
-        test(epoch)
-        scheduler.step()
+        val_loss = test(epoch)
+        scheduler.step(val_loss)
 
     print("Before factorization")
     test(0)
