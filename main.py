@@ -112,7 +112,8 @@ if args.resume:
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
 # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
+# scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
 ##  multi step LR
 
 # Training
@@ -189,6 +190,7 @@ def test(epoch):
             os.mkdir("checkpoint")
         torch.save(state, "./checkpoint/ckpt.pth")
         best_acc = acc
+    return test_loss
 
 
 if __name__ == "__main__":
@@ -208,8 +210,8 @@ if __name__ == "__main__":
             unfreezeResidual(model)
 
         train(epoch)
-        test(epoch)
-        scheduler.step()
+        val_loss = test(epoch)
+        scheduler.step(val_loss)
 
         if (epoch % INTERVAL) == 0:
             freezeResidual(model)
