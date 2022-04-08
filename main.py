@@ -16,7 +16,7 @@ from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
 TOTAL = 200
-WARM_UP = 0
+WARM_UP = 20
 INTERVAL = 5
 
 train_accs = []
