@@ -85,20 +85,21 @@ print("==> Building model..")
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
-model = ResNeXt29_2x64d()
+# model = ResNeXt29_2x64d()
 # net = MobileNet()
 # net = MobileNetV2()
 # net = DPN92()
 # net = ShuffleNetG2()
 # net = SENet18()
 # net = ShuffleNetV2(1)
-# net = EfficientNetB0()
+model = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
+
 model = model.to(device)
-if device == "cuda":
-    model = torch.nn.DataParallel(model)
-    cudnn.benchmark = True
+# if device == "cuda":
+#     model = torch.nn.DataParallel(model)
+#     cudnn.benchmark = True
 
 if args.resume:
     # Load checkpoint.
