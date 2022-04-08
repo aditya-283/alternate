@@ -96,9 +96,9 @@ model = ResNeXt29_2x64d()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 model = model.to(device)
-# if device == "cuda":
-#     model = torch.nn.DataParallel(model)
-#     cudnn.benchmark = True
+if device == "cuda":
+    model = torch.nn.DataParallel(model)
+    cudnn.benchmark = True
 
 if args.resume:
     # Load checkpoint.
