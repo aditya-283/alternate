@@ -178,13 +178,13 @@ def factorizeModel(model, rank_ratio): # in-place
 def unfreezeResidual(model):
     for name, param in model.named_parameters():
         if "res" in name:
-            print(name)
+            # print(name)
             param.requires_grad = True
 
 def freezeResidual(model):
     for name, param in model.named_parameters():
         if "res" in name:
-            print(name)
+            # print(name)
             param.requires_grad = False
 
 resnet = ResNet18()

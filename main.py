@@ -80,12 +80,12 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print("==> Building model..")
-model = ResNet18()
+# model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
-# net = ResNeXt29_2x64d()
+model = ResNeXt29_2x64d()
 # net = MobileNet()
 # net = MobileNetV2()
 # net = DPN92()
