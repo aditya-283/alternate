@@ -161,7 +161,7 @@ def EfficientNetB0():
         'dropout_rate': 0.2,
         'drop_connect_rate': 0.2,
     }
-    return EfficientNet(cfg)
+    return EfficientNet(cfg, num_classes=100)
 
 
 def test():
