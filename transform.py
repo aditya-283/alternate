@@ -28,7 +28,7 @@ def factorize(linear_layer, rank_ratio):
         lowrank_layer.v.weight.copy_(v_weight.t())
         lowrank_layer.res.weight.copy_(res_weight)
 
-        if bias:
+        if bias is not None:
             lowrank_layer.u.bias.copy_(linear_layer.bias)
 
     return lowrank_layer
