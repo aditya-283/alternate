@@ -150,7 +150,7 @@ def factorizeLayer(layer, rank_ratio):
     model_weight_u = v_weight.t().view(v_weight_shape[1], weight.size()[1], weight.size()[2], weight.size()[3])
     model_res = res.view(weight.size())
 
-    lowrank = ConvLR(in_channels, out_channels, kernel, stride, padding, rank_ratio, layer.bias, layer.weight.device, layer.weight.dtype)
+    lowrank = ConvLR(in_channels, out_channels, kernel, stride, padding, rank_ratio, layer.bias is not None, layer.weight.device, layer.weight.dtype)
     with torch.no_grad():
         lowrank.u.weight.copy_(model_weight_u)
         lowrank.v.weight.copy_(model_weight_v)
