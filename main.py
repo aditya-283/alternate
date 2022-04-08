@@ -80,7 +80,7 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print("==> Building model..")
-# model = ResNet18()
+model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
@@ -92,7 +92,7 @@ print("==> Building model..")
 # net = ShuffleNetG2()
 # net = SENet18()
 # net = ShuffleNetV2(1)
-model = EfficientNetB0()
+# model = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 
