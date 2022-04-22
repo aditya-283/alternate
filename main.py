@@ -15,8 +15,8 @@ from models import *
 from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
-TOTAL = 300
-WARM_UP = 60
+TOTAL = 200
+WARM_UP = 20
 INTERVAL = 5
 
 train_accs = []
@@ -51,14 +51,14 @@ transform_test = transforms.Compose(
     ]
 )
 
-trainset = torchvision.datasets.CIFAR100(
+trainset = torchvision.datasets.CIFAR10(
     root="./data", train=True, download=True, transform=transform_train
 )
 trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=128, shuffle=True, num_workers=1
 )
 
-testset = torchvision.datasets.CIFAR100(
+testset = torchvision.datasets.CIFAR10(
     root="./data", train=False, download=True, transform=transform_test
 )
 testloader = torch.utils.data.DataLoader(
@@ -80,6 +80,7 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print("==> Building model..")
+# remember to check num_classes
 model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
