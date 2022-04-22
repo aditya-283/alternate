@@ -15,8 +15,8 @@ from models import *
 from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
-TOTAL = 200
-WARM_UP = 20
+TOTAL = 300
+WARM_UP = 50
 INTERVAL = 5
 
 train_accs = []
@@ -81,7 +81,7 @@ testloader = torch.utils.data.DataLoader(
 # Model
 print("==> Building model..")
 # remember to check num_classes
-model = ResNet18()
+# model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
@@ -93,7 +93,7 @@ model = ResNet18()
 # net = ShuffleNetG2()
 # net = SENet18()
 # net = ShuffleNetV2(1)
-# model = EfficientNetB0()
+model = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 
