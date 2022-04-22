@@ -188,4 +188,6 @@ def freezeResidual(model):
             param.requires_grad = False
 
 resnet = ResNet18()
+print(resnet)
 factorizeModel(resnet, 0.25)
+print(resnet)

@@ -15,14 +15,14 @@ from models import *
 from utils import progress_bar
 from transform import factorizeModel, freezeResidual, unfreezeResidual
 
-TOTAL = 200
-WARM_UP = 20
+TOTAL = 300
+WARM_UP = 60
 INTERVAL = 5
 
 train_accs = []
 test_accs = []
 
-parser = argparse.ArgumentParser(description="PyTorch CIFAR10 Training")
+parser = argparse.ArgumentParser(description="PyTorch CIFAR100 Training")
 parser.add_argument("--lr", default=0.1, type=float, help="learning rate")
 parser.add_argument(
     "--resume", "-r", action="store_true", help="resume from checkpoint"
@@ -80,7 +80,7 @@ testloader = torch.utils.data.DataLoader(
 
 # Model
 print("==> Building model..")
-# model = ResNet18()
+model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
@@ -92,7 +92,7 @@ print("==> Building model..")
 # net = ShuffleNetG2()
 # net = SENet18()
 # net = ShuffleNetV2(1)
-model = EfficientNetB0()
+# model = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 
@@ -113,8 +113,8 @@ if args.resume:
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4)
 # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-# scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[100, 150], gamma=0.1)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[150, 225], gamma=0.1)
+# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
 ##  multi step LR
 
 # Training
