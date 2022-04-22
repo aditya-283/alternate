@@ -198,7 +198,7 @@ if __name__ == "__main__":
     for epoch in range(start_epoch, start_epoch + WARM_UP):
         train(epoch)
         val_loss = test(epoch)
-        scheduler.step(val_loss)
+        scheduler.step()
 
     print("Before factorization")
     test(0)
@@ -212,7 +212,8 @@ if __name__ == "__main__":
 
         train(epoch)
         val_loss = test(epoch)
-        scheduler.step(val_loss)
+        scheduler.step()
+        # scheduler.step(val_loss)
 
         if (epoch % INTERVAL) == 0:
             freezeResidual(model)
