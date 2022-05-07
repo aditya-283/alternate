@@ -52,18 +52,18 @@ transform_test = transforms.Compose(
 )
 
 trainset = torchvision.datasets.Caltech101(
-    root="./data", train=True, download=True, transform=transform_train
+    root="./data",  download=True, transform=transform_train
 )
 trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=128, shuffle=True, num_workers=1
 )
 
-testset = torchvision.datasets.Caltech101(
-    root="./data", train=False, download=True, transform=transform_test
-)
-testloader = torch.utils.data.DataLoader(
-    testset, batch_size=100, shuffle=False, num_workers=1
-)
+# testset = torchvision.datasets.Caltech101(
+#     root="./data", train=False, download=True, transform=transform_test
+# )
+# testloader = torch.utils.data.DataLoader(
+#     testset, batch_size=100, shuffle=False, num_workers=1
+# )
 
 # classes = (
 #     "plane",
@@ -198,21 +198,21 @@ def test(epoch):
 if __name__ == "__main__":
     for epoch in range(start_epoch, start_epoch + WARM_UP):
         train(epoch)
-        val_loss = test(epoch)
+        # val_loss = test(epoch)
         scheduler.step()
 
     print("Before factorization")
-    test(0)
+    # test(0)
     factorizeModel(model, 0.25)
     print("Post factorization")
-    test(0)
+    # test(0)
     freezeResidual(model)
     for epoch in range(TOTAL - WARM_UP):
         if (epoch % INTERVAL) == 0:
             unfreezeResidual(model)
 
         train(epoch)
-        val_loss = test(epoch)
+        # val_loss = test(epoch)
         scheduler.step()
         # scheduler.step(val_loss)
 
