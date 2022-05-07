@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 
 train_accs = []
 test_accs = []
-with open("results/acc_multistepLR.txt") as acc:
+with open("cifar10workswellofc.txt") as acc:
     for i, line in enumerate(acc):
         if i == 0:
             continue
@@ -28,5 +28,5 @@ plt.scatter(
 plt.annotate(f"({train_accs[-1]:.2f})", (len(train_accs) - 1, train_accs[-1]))
 plt.annotate(f"({test_accs[-1]:.2f})", (len(test_accs) - 1, test_accs[-1]))
 plt.legend(loc="lower right")
-plt.title("ResNet18 model, UV training, CIFAR-100, MultiStepLR(100, 150)")
+plt.title("Resnet18 model, UV training, CIFAR-10, MultiStepLR(100, 150)")
 plt.show()

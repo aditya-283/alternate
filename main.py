@@ -51,14 +51,14 @@ transform_test = transforms.Compose(
     ]
 )
 
-trainset = torchvision.datasets.CIFAR10(
+trainset = torchvision.datasets.Caltech101(
     root="./data", train=True, download=True, transform=transform_train
 )
 trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=128, shuffle=True, num_workers=1
 )
 
-testset = torchvision.datasets.CIFAR10(
+testset = torchvision.datasets.Caltech101(
     root="./data", train=False, download=True, transform=transform_test
 )
 testloader = torch.utils.data.DataLoader(
@@ -81,7 +81,7 @@ testloader = torch.utils.data.DataLoader(
 # Model
 print("==> Building model..")
 # remember to check num_classes
-# model = ResNet18()
+model = ResNet18()
 # net = VGG('VGG19')
 # net = PreActResNet18()
 # net = GoogLeNet()
@@ -93,7 +93,7 @@ print("==> Building model..")
 # net = ShuffleNetG2()
 # net = SENet18()
 # net = ShuffleNetV2(1)
-model = EfficientNetB0()
+# model = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 
